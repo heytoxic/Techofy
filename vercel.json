@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "buildCommand": "",
+  "outputDirectory": ".",
+  "functions": {
+    "api/subscribe.js": {
+      "memory": 128,
+      "maxDuration": 10
+    },
+    "api/count.js": {
+      "memory": 128,
+      "maxDuration": 10
+    }
+  }
+}

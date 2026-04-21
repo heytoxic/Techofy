@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Techofy Clouds — Coming Soon</title>
+  <meta name="description" content="Enterprise-grade Windows RDP & Ubuntu VPS. Coming soon." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg:        #03060f;
+      --bg2:       #06101e;
+      --cyan:      #00d4ff;
+      --blue:      #0057ff;
+      --purple:    #7b2fff;
+      --white:     #ffffff;
+      --muted:     rgba(255,255,255,0.45);
+      --glass:     rgba(255,255,255,0.04);
+      --gborder:   rgba(255,255,255,0.08);
+    }
+
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── CANVAS ── */
+    #bg-canvas {
+      position: fixed; inset: 0;
+      z-index: 0; pointer-events: none;
+    }
+
+    /* ── ORBS ── */
+    .orb {
+      position: fixed; border-radius: 50%;
+      filter: blur(90px); pointer-events: none; z-index: 1;
+    }
+    .orb-a {
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(0,87,255,.14), transparent 70%);
+      top: -250px; left: -200px;
+      animation: driftA 14s ease-in-out infinite alternate;
+    }
+    .orb-b {
+      width: 550px; height: 550px;
+      background: radial-gradient(circle, rgba(123,47,255,.12), transparent 70%);
+      bottom: -180px; right: -180px;
+      animation: driftB 18s ease-in-out infinite alternate;
+    }
+    .orb-c {
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(0,212,255,.07), transparent 70%);
+      top: 45%; right: 15%;
+      animation: driftA 10s ease-in-out infinite alternate-reverse;
+    }
+    @keyframes driftA { to { transform: translate(40px, -60px); } }
+    @keyframes driftB { to { transform: translate(-50px, 40px); } }
+
+    /* ── HEADER ── */
+    header {
+      position: fixed; top:0; left:0; right:0; z-index:100;
+      padding: 18px 48px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(3,6,15,.65);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--gborder);
+    }
+    .logo {
+      display: flex; align-items: center; gap: 12px;
+    }
+    .logo-mark {
+      width: 38px; height: 38px;
+      position: relative; flex-shrink: 0;
+    }
+    .logo-mark svg { width:100%; height:100%; }
+    .logo-name {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700; font-size: 17px;
+      letter-spacing: .04em;
+    }
+    .logo-name b { color: var(--cyan); font-weight:800; }
+    .nav-pill {
+      display: flex; align-items: center; gap: 7px;
+      padding: 7px 16px;
+      border: 1px solid var(--gborder); border-radius: 100px;
+      background: var(--glass);
+      font-size: 11px; font-weight: 500;
+      letter-spacing: .12em; text-transform: uppercase;
+      color: var(--muted);
+    }
+    .status-dot {
+      width: 6px; height: 6px;
+      background: #22c55e; border-radius: 50%;
+      position: relative;
+    }
+    .status-dot::before {
+      content:''; position:absolute; inset:-3px;
+      background: rgba(34,197,94,.4); border-radius: 50%;
+      animation: ping 1.6s ease-in-out infinite;
+    }
+    @keyframes ping {
+      0%,100% { transform:scale(1); opacity:.8; }
+      50%      { transform:scale(2.2); opacity:0; }
+    }
+
+    /* ── MAIN ── */
+    main {
+      position: relative; z-index: 10;
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 130px 24px 80px;
+      text-align: center;
+    }
+
+    /* ── 3D SCENE ── */
+    .scene-wrap {
+      position: relative;
+      width: 260px; height: 260px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 44px;
+    }
+
+    /* Outer rings */
+    .ring {
+      position: absolute;
+      border-radius: 50%; border: 1px solid;
+      top:50%; left:50%;
+      transform: translate(-50%,-50%);
+    }
+    .ring-1 {
+      width:170px; height:170px;
+      border-color: rgba(0,212,255,.22);
+      animation: rSpin 9s linear infinite;
+    }
+    .ring-2 {
+      width:215px; height:215px;
+      border-color: rgba(0,87,255,.16);
+      animation: rSpin 13s linear infinite reverse;
+    }
+    .ring-3 {
+      width:260px; height:260px;
+      border-color: rgba(123,47,255,.12);
+      animation: rSpin 18s linear infinite;
+    }
+    @keyframes rSpin {
+      from { transform: translate(-50%,-50%) rotate(0deg); }
+      to   { transform: translate(-50%,-50%) rotate(360deg); }
+    }
+
+    /* Orbiting dots */
+    .orbit-dot {
+      position: absolute; border-radius: 50%;
+      box-shadow: 0 0 10px currentColor;
+    }
+    .ring-1 .orbit-dot {
+      width:7px; height:7px;
+      background: var(--cyan); color: var(--cyan);
+      top:-3.5px; left:calc(50% - 3.5px);
+    }
+    .ring-2 .orbit-dot {
+      width:5px; height:5px;
+      background: var(--blue); color: var(--blue);
+      bottom:-2.5px; left:calc(50% - 2.5px);
+    }
+    .ring-3 .orbit-dot {
+      width:6px; height:6px;
+      background: var(--purple); color: var(--purple);
+      top:-3px; right:calc(50% - 3px);
+    }
+
+    /* Central cube */
+    .cube-scene {
+      width: 90px; height: 90px;
+      perspective: 500px;
+      position: relative; z-index: 2;
+    }
+    .cube {
+      width:100%; height:100%;
+      position: relative; transform-style: preserve-3d;
+      animation: cubeSpin 11s linear infinite;
+    }
+    @keyframes cubeSpin {
+      0%   { transform: rotateX(0deg)   rotateY(0deg)   rotateZ(0deg); }
+      25%  { transform: rotateX(90deg)  rotateY(180deg) rotateZ(45deg); }
+      50%  { transform: rotateX(180deg) rotateY(360deg) rotateZ(0deg); }
+      75%  { transform: rotateX(270deg) rotateY(180deg) rotateZ(-45deg); }
+      100% { transform: rotateX(360deg) rotateY(360deg) rotateZ(0deg); }
+    }
+    .face {
+      position: absolute;
+      width: 70px; height: 70px;
+      top: 10px; left: 10px;
+      border: 1px solid rgba(0,212,255,.35);
+      background: rgba(0,212,255,.06);
+      backdrop-filter: blur(6px);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 26px;
+      box-shadow: inset 0 0 20px rgba(0,212,255,.06), 0 0 12px rgba(0,212,255,.1);
+    }
+    .face.f { transform: translateZ(35px); }
+    .face.b { transform: rotateY(180deg) translateZ(35px); }
+    .face.r { transform: rotateY(90deg) translateZ(35px); }
+    .face.l { transform: rotateY(-90deg) translateZ(35px); }
+    .face.t { transform: rotateX(90deg) translateZ(35px); }
+    .face.d { transform: rotateX(-90deg) translateZ(35px); }
+
+    /* ── BADGE ── */
+    .badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 7px 18px; border-radius: 100px;
+      border: 1px solid rgba(0,212,255,.28);
+      background: rgba(0,212,255,.06);
+      font-size: 11px; font-weight:500; letter-spacing:.12em;
+      text-transform: uppercase; color: var(--cyan);
+      margin-bottom: 22px;
+    }
+    .badge-blink {
+      width:5px; height:5px; border-radius:50%;
+      background: var(--cyan);
+      box-shadow: 0 0 8px var(--cyan);
+      animation: glowPulse 2s ease-in-out infinite;
+    }
+    @keyframes glowPulse {
+      0%,100% { box-shadow: 0 0 6px var(--cyan); }
+      50%      { box-shadow: 0 0 18px var(--cyan), 0 0 30px var(--cyan); }
+    }
+
+    /* ── HEADLINE ── */
+    h1 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(38px, 7.5vw, 84px);
+      line-height: 1.02; letter-spacing: -.025em;
+      margin-bottom: 20px;
+    }
+    .grad-text {
+      background: linear-gradient(140deg, #ffffff 0%, #b8e8ff 35%, #8ba8ff 65%, #c4a0ff 100%);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .cyan-text {
+      background: linear-gradient(90deg, var(--cyan), var(--blue));
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* ── SUBTITLE ── */
+    .subtitle {
+      font-size: 16px; line-height: 1.75;
+      color: var(--muted); max-width: 480px;
+      margin-bottom: 40px; font-weight:300;
+    }
+
+    /* ── COUNTER ── */
+    .counter-row {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 32px; font-size:14px; color: var(--muted);
+    }
+    .avatars {
+      display: flex;
+    }
+    .av {
+      width:28px; height:28px; border-radius:50%;
+      border:2px solid var(--bg);
+      display:flex; align-items:center; justify-content:center;
+      font-size:11px; font-weight:600;
+      margin-left:-7px;
+    }
+    .av:first-child { margin-left:0; }
+    .av-1 { background: linear-gradient(135deg,#00d4ff,#0057ff); }
+    .av-2 { background: linear-gradient(135deg,#7b2fff,#0057ff); }
+    .av-3 { background: linear-gradient(135deg,#ff6b2f,#ff2f7b); }
+    .counter-row strong {
+      font-family:'Syne',sans-serif;
+      font-size:20px; font-weight:700; color:var(--white);
+    }
+
+    /* ── FORM ── */
+    .form-wrap { width:100%; max-width:490px; }
+    .form-box {
+      display:flex; gap:8px;
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.1);
+      border-radius:14px;
+      padding:6px 6px 6px 20px;
+      transition: border-color .3s, box-shadow .3s;
+    }
+    .form-box:focus-within {
+      border-color: rgba(0,212,255,.4);
+      box-shadow: 0 0 0 3px rgba(0,212,255,.07);
+    }
+    input[type=email] {
+      flex:1; background:none; border:none; outline:none;
+      color:var(--white); font-family:'DM Sans',sans-serif;
+      font-size:15px; padding:12px 0;
+    }
+    input[type=email]::placeholder { color:rgba(255,255,255,.22); }
+
+    .notify-btn {
+      background: linear-gradient(135deg, var(--cyan), var(--blue));
+      border:none; border-radius:10px;
+      padding:12px 26px; color:var(--white);
+      font-family:'Syne',sans-serif;
+      font-weight:700; font-size:14px; letter-spacing:.04em;
+      cursor:pointer; transition:all .3s;
+      display:flex; align-items:center; gap:8px;
+      white-space:nowrap; position:relative; overflow:hidden;
+    }
+    .notify-btn::before {
+      content:''; position:absolute; inset:0;
+      background:linear-gradient(135deg,rgba(255,255,255,.25),transparent);
+      opacity:0; transition:opacity .3s;
+    }
+    .notify-btn:hover::before { opacity:1; }
+    .notify-btn:hover {
+      transform:translateY(-2px);
+      box-shadow:0 10px 30px rgba(0,212,255,.35);
+    }
+    .notify-btn:active { transform:translateY(0); }
+    .notify-btn:disabled { opacity:.65; cursor:not-allowed; transform:none !important; }
+
+    .btn-spinner {
+      width:15px; height:15px;
+      border:2px solid rgba(255,255,255,.3);
+      border-top-color:#fff; border-radius:50%;
+      animation:spin .55s linear infinite; display:none;
+    }
+    @keyframes spin { to { transform:rotate(360deg); } }
+
+    .form-msg {
+      margin-top:12px; font-size:13px;
+      text-align:center; display:none; color:#ff6b6b;
+    }
+    .form-msg.ok { color:#4ade80; }
+
+    /* ── FEATURES ── */
+    .pills {
+      display:flex; flex-wrap:wrap; gap:10px;
+      justify-content:center; margin-top:52px;
+    }
+    .pill {
+      display:flex; align-items:center; gap:7px;
+      padding:9px 18px; border-radius:100px;
+      border:1px solid var(--gborder); background:var(--glass);
+      font-size:13px; color:var(--muted);
+      transition:all .3s; cursor:default;
+    }
+    .pill:hover {
+      border-color:rgba(0,212,255,.3);
+      color:rgba(255,255,255,.85);
+      transform:translateY(-2px);
+      background:rgba(0,212,255,.06);
+    }
+    .pill span:first-child { font-size:15px; }
+
+    /* ── FOOTER ── */
+    footer {
+      position:relative; z-index:10;
+      padding:28px 48px;
+      border-top:1px solid var(--gborder);
+      display:flex; align-items:center;
+      justify-content:space-between; flex-wrap:wrap; gap:12px;
+      background:rgba(3,6,15,.7);
+      backdrop-filter:blur(12px);
+    }
+    .footer-brand {
+      display:flex; align-items:center; gap:10px;
+      font-family:'Syne',sans-serif;
+      font-weight:600; font-size:14px; color:rgba(255,255,255,.5);
+    }
+    .footer-brand b { color:var(--cyan); }
+    .footer-links {
+      display:flex; align-items:center; gap:20px;
+      font-size:12px; color:rgba(255,255,255,.3);
+    }
+    .footer-links a {
+      color:rgba(255,255,255,.3); text-decoration:none;
+      transition:color .2s;
+    }
+    .footer-links a:hover { color:var(--cyan); }
+    .footer-right { font-size:12px; color:rgba(255,255,255,.25); }
+
+    /* ── SUCCESS OVERLAY ── */
+    .overlay {
+      position:fixed; inset:0; z-index:500;
+      display:flex; align-items:center; justify-content:center;
+      background:rgba(3,6,15,.88);
+      backdrop-filter:blur(22px);
+      opacity:0; pointer-events:none;
+      transition:opacity .4s ease;
+    }
+    .overlay.show { opacity:1; pointer-events:all; }
+    .success-card {
+      background:linear-gradient(135deg, rgba(0,212,255,.09), rgba(0,87,255,.09));
+      border:1px solid rgba(0,212,255,.28); border-radius:24px;
+      padding:52px 44px; max-width:420px; width:92%;
+      text-align:center; position:relative; overflow:hidden;
+      transform: scale(.8) translateY(30px);
+      transition: transform .45s cubic-bezier(.34,1.56,.64,1);
+    }
+    .overlay.show .success-card { transform:scale(1) translateY(0); }
+    .success-card::before {
+      content:''; position:absolute; top:-60%; left:-60%;
+      width:220%; height:220%;
+      background:radial-gradient(circle at center, rgba(0,212,255,.07), transparent 60%);
+    }
+    .success-emoji {
+      font-size:52px; margin-bottom:20px;
+      animation:emojiBounce .7s cubic-bezier(.34,1.56,.64,1) .1s both;
+    }
+    @keyframes emojiBounce {
+      from { transform:scale(0) rotate(-10deg); }
+      to   { transform:scale(1) rotate(0); }
+    }
+    .success-glow {
+      position:absolute; top:50px; left:50%;
+      transform:translateX(-50%);
+      width:80px; height:80px; border-radius:50%;
+      border:2px solid rgba(0,212,255,.3);
+      animation:pulseRing 2s ease-out infinite;
+    }
+    @keyframes pulseRing {
+      0%   { transform:translateX(-50%) scale(1); opacity:.6; }
+      100% { transform:translateX(-50%) scale(2); opacity:0; }
+    }
+    .success-title {
+      font-family:'Syne',sans-serif;
+      font-weight:800; font-size:26px; color:var(--white);
+      margin-bottom:14px; position:relative;
+    }
+    .success-body {
+      font-size:15px; line-height:1.7;
+      color:var(--muted); margin-bottom:32px;
+      position:relative;
+    }
+    .success-body em { color:var(--cyan); font-style:normal; font-weight:500; }
+    .close-btn {
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:12px; padding:12px 32px;
+      color:var(--white); font-family:'DM Sans',sans-serif;
+      font-size:14px; cursor:pointer;
+      transition:all .2s; position:relative;
+    }
+    .close-btn:hover {
+      background:rgba(255,255,255,.14);
+      border-color:rgba(0,212,255,.3);
+    }
+
+    /* ── CONFETTI ── */
+    #conf-canvas {
+      position:fixed; inset:0; z-index:499; pointer-events:none;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width:640px) {
+      header { padding:16px 20px; }
+      .logo-name { font-size:15px; }
+      footer { padding:22px 20px; flex-direction:column; text-align:center; }
+      .footer-links { justify-content:center; }
+      .form-box { flex-direction:column; padding:12px; }
+      input[type=email] { padding:10px 6px; }
+      .notify-btn { width:100%; justify-content:center; }
+      .success-card { padding:36px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BG canvas -->
+  <canvas id="bg-canvas"></canvas>
+  <canvas id="conf-canvas"></canvas>
+  <div class="orb orb-a"></div>
+  <div class="orb orb-b"></div>
+  <div class="orb orb-c"></div>
+
+  <!-- ═══════ HEADER ═══════ -->
+  <header>
+    <div class="logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="lg1" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+              <stop offset="0%"   stop-color="#00d4ff"/>
+              <stop offset="100%" stop-color="#0057ff"/>
+            </linearGradient>
+          </defs>
+          <path d="M9 25a6 6 0 01-1-11.9A8 8 0 0122.5 11a6.5 6.5 0 016.4 7.5H29a5 5 0 110 10H9z"
+                fill="url(#lg1)" opacity=".9"/>
+          <circle cx="20" cy="17" r="3.5" fill="rgba(0,212,255,.5)"/>
+          <path d="M20 13.5V9M17 11l3-3 3 3" stroke="#00d4ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="13" cy="27" r="1.5" fill="rgba(0,212,255,.6)"/>
+          <circle cx="20" cy="30" r="1.5" fill="rgba(0,212,255,.4)"/>
+          <circle cx="27" cy="27" r="1.5" fill="rgba(0,212,255,.6)"/>
+        </svg>
+      </div>
+      <div class="logo-name">Techofy <b>Clouds</b></div>
+    </div>
+
+    <div class="nav-pill">
+      <div class="status-dot"></div>
+      Systems Live
+    </div>
+  </header>
+
+  <!-- ═══════ MAIN ═══════ -->
+  <main>
+
+    <!-- 3-D Scene -->
+    <div class="scene-wrap">
+      <div class="ring ring-3"><div class="orbit-dot"></div></div>
+      <div class="ring ring-2"><div class="orbit-dot"></div></div>
+      <div class="ring ring-1"><div class="orbit-dot"></div></div>
+
+      <div class="cube-scene">
+        <div class="cube">
+          <div class="face f">☁️</div>
+          <div class="face b">🚀</div>
+          <div class="face r">⚡</div>
+          <div class="face l">🔒</div>
+          <div class="face t">🌐</div>
+          <div class="face d">💾</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Badge -->
+    <div class="badge">
+      <div class="badge-blink"></div>
+      Coming Soon
+    </div>
+
+    <!-- Headline -->
+    <h1>
+      <span class="grad-text">Cloud <span class="cyan-text">Infrastructure</span><br>Reimagined</span>
+    </h1>
+
+    <p class="subtitle">
+      Enterprise-grade <strong style="color:rgba(255,255,255,.7)">Windows RDP &amp; Ubuntu VPS</strong> built for developers.
+      Scalable, secure &amp; blazingly fast. Be the first to know when we go live.
+    </p>
+
+    <!-- Counter -->
+    <div class="counter-row">
+      <div class="avatars">
+        <div class="av av-1">A</div>
+        <div class="av av-2">B</div>
+        <div class="av av-3">C</div>
+      </div>
+      <span><strong id="subCount">—</strong> people already subscribed</span>
+    </div>
+
+    <!-- Form -->
+    <div class="form-wrap">
+      <div class="form-box">
+        <input type="email" id="emailInput" placeholder="Enter your email address" autocomplete="email" />
+        <button class="notify-btn" id="notifyBtn" onclick="handleSubscribe()">
+          <span id="btnLabel">Notify Me</span>
+          <div class="btn-spinner" id="btnSpinner"></div>
+          <svg id="btnArrow" width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M3 8h10M9 4l4 4-4 4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+      <div class="form-msg" id="formMsg"></div>
+    </div>
+
+    <!-- Pills -->
+    <div class="pills">
+      <div class="pill"><span>🖥️</span>Windows RDP</div>
+      <div class="pill"><span>🐧</span>Ubuntu VPS</div>
+      <div class="pill"><span>⚡</span>NVMe SSD</div>
+      <div class="pill"><span>🛡️</span>DDoS Protected</div>
+      <div class="pill"><span>🌍</span>Global Nodes</div>
+      <div class="pill"><span>📊</span>99.9% Uptime</div>
+    </div>
+
+  </main>
+
+  <!-- ═══════ FOOTER ═══════ -->
+  <footer>
+    <div class="footer-brand">
+      <svg width="22" height="22" viewBox="0 0 40 40" fill="none">
+        <path d="M9 25a6 6 0 01-1-11.9A8 8 0 0122.5 11a6.5 6.5 0 016.4 7.5H29a5 5 0 110 10H9z"
+              fill="url(#lg1)" opacity=".7"/>
+      </svg>
+      Techofy <b>Clouds</b>
+    </div>
+    <div class="footer-links">
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="mailto:hello@techofyclouds.com">Contact</a>
+    </div>
+    <div class="footer-right">© 2025 Techofy Clouds. All rights reserved.</div>
+  </footer>
+
+  <!-- ═══════ SUCCESS OVERLAY ═══════ -->
+  <div class="overlay" id="overlay" onclick="maybeClose(event)">
+    <div class="success-card">
+      <div class="success-glow"></div>
+      <div class="success-emoji">🎉</div>
+      <div class="success-title">You're on the list!</div>
+      <div class="success-body">
+        <em>Subscribed!</em> You will receive a notification when the website
+        is live. Welcome to the Techofy Clouds waitlist — we'll be in touch soon!
+      </div>
+      <button class="close-btn" onclick="closeOverlay()">Awesome, got it!</button>
+    </div>
+  </div>
+
+  <script>
+  /* ═══════════════════════════════
+     PARTICLE BACKGROUND
+  ═══════════════════════════════ */
+  (function(){
+    const c = document.getElementById('bg-canvas');
+    const x = c.getContext('2d');
+    let W, H, pts = [];
+    const N = 90;
+
+    function resize(){ W = c.width = innerWidth; H = c.height = innerHeight; }
+    window.addEventListener('resize', resize); resize();
+
+    class P {
+      constructor(){
+        this.x = Math.random()*W; this.y = Math.random()*H;
+        this.vx = (Math.random()-.5)*.28; this.vy = (Math.random()-.5)*.28;
+        this.r = Math.random()*1.4+.4;
+        this.a = Math.random()*.5+.08;
+        this.col = Math.random()>.5 ? '#00d4ff' : '#0057ff';
+      }
+      tick(){
+        this.x+=this.vx; this.y+=this.vy;
+        if(this.x<0||this.x>W) this.vx*=-1;
+        if(this.y<0||this.y>H) this.vy*=-1;
+      }
+      draw(){
+        x.beginPath(); x.arc(this.x,this.y,this.r,0,Math.PI*2);
+        x.fillStyle=this.col; x.globalAlpha=this.a; x.fill(); x.globalAlpha=1;
+      }
+    }
+    for(let i=0;i<N;i++) pts.push(new P());
+
+    function loop(){
+      x.clearRect(0,0,W,H);
+      pts.forEach(p=>{ p.tick(); p.draw(); });
+      for(let i=0;i<N;i++) for(let j=i+1;j<N;j++){
+        const dx=pts[i].x-pts[j].x, dy=pts[i].y-pts[j].y;
+        const d=Math.sqrt(dx*dx+dy*dy);
+        if(d<110){
+          x.beginPath(); x.moveTo(pts[i].x,pts[i].y); x.lineTo(pts[j].x,pts[j].y);
+          x.strokeStyle='#00d4ff'; x.globalAlpha=(1-d/110)*.07;
+          x.lineWidth=.5; x.stroke(); x.globalAlpha=1;
+        }
+      }
+      requestAnimationFrame(loop);
+    }
+    loop();
+  })();
+
+  /* ═══════════════════════════════
+     CONFETTI
+  ═══════════════════════════════ */
+  (function(){
+    const cv = document.getElementById('conf-canvas');
+    const cx = cv.getContext('2d');
+    window._conf = { active:false, pieces:[] };
+    window.addEventListener('resize',()=>{ cv.width=innerWidth; cv.height=innerHeight; });
+    cv.width=innerWidth; cv.height=innerHeight;
+
+    const COLS = ['#00d4ff','#0057ff','#7b2fff','#ffd700','#ff6b6b','#00ff88','#ffaa00'];
+    class Flake {
+      constructor(){
+        this.x=Math.random()*cv.width; this.y=-10;
+        this.w=Math.random()*11+4; this.h=Math.random()*5+2;
+        this.col=COLS[Math.floor(Math.random()*COLS.length)];
+        this.vx=(Math.random()-.5)*4.5; this.vy=Math.random()*3.5+2;
+        this.rot=Math.random()*Math.PI*2; this.vr=(Math.random()-.5)*.25;
+        this.a=1;
+      }
+      update(){
+        this.x+=this.vx; this.y+=this.vy; this.rot+=this.vr;
+        if(this.y>cv.height*.65) this.a-=.025;
+      }
+      draw(){
+        cx.save(); cx.translate(this.x,this.y); cx.rotate(this.rot);
+        cx.fillStyle=this.col; cx.globalAlpha=Math.max(0,this.a);
+        cx.fillRect(-this.w/2,-this.h/2,this.w,this.h); cx.restore();
+      }
+    }
+
+    function anim(){
+      if(!window._conf.active && !window._conf.pieces.length) return;
+      cx.clearRect(0,0,cv.width,cv.height);
+      window._conf.pieces = window._conf.pieces.filter(f=>f.a>0);
+      window._conf.pieces.forEach(f=>{ f.update(); f.draw(); });
+      requestAnimationFrame(anim);
+    }
+
+    window.launchConfetti = function(){
+      window._conf.active=true;
+      for(let i=0;i<130;i++) setTimeout(()=>window._conf.pieces.push(new Flake()), i*22);
+      setTimeout(()=>window._conf.active=false, 3500);
+      anim();
+    };
+  })();
+
+  /* ═══════════════════════════════
+     SUBSCRIBER COUNT
+  ═══════════════════════════════ */
+  async function fetchCount(){
+    try {
+      const r = await fetch('/api/count');
+      const d = await r.json();
+      document.getElementById('subCount').textContent = d.total ?? 0;
+    } catch { document.getElementById('subCount').textContent = '0'; }
+  }
+  fetchCount();
+
+  /* ═══════════════════════════════
+     SUBSCRIBE
+  ═══════════════════════════════ */
+  async function handleSubscribe(){
+    const email   = document.getElementById('emailInput').value.trim();
+    const btn     = document.getElementById('notifyBtn');
+    const label   = document.getElementById('btnLabel');
+    const spinner = document.getElementById('btnSpinner');
+    const arrow   = document.getElementById('btnArrow');
+    const msg     = document.getElementById('formMsg');
+
+    msg.style.display='none'; msg.className='form-msg';
+
+    if(!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+      msg.textContent='⚠️ Please enter a valid email address.';
+      msg.style.display='block';
+      setTimeout(()=>msg.style.display='none', 3200);
+      return;
+    }
+
+    btn.disabled=true;
+    label.textContent='Subscribing…';
+    spinner.style.display='block';
+    arrow.style.display='none';
+
+    try {
+      const res = await fetch('/api/subscribe', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ email })
+      });
+      const data = await res.json();
+
+      label.textContent='✓ Subscribed!';
+      spinner.style.display='none';
+      document.getElementById('emailInput').value='';
+      if(data.total !== undefined)
+        document.getElementById('subCount').textContent = data.total;
+
+      setTimeout(()=>{ document.getElementById('overlay').classList.add('show'); launchConfetti(); }, 320);
+
+    } catch(err){
+      msg.textContent='❌ Connection error. Please try again.';
+      msg.style.display='block';
+      label.textContent='Notify Me';
+      spinner.style.display='none';
+      arrow.style.display='block';
+    } finally {
+      setTimeout(()=>{
+        btn.disabled=false;
+        label.textContent='Notify Me';
+        spinner.style.display='none';
+        arrow.style.display='block';
+      }, 2800);
+    }
+  }
+
+  document.getElementById('emailInput').addEventListener('keydown', e=>{ if(e.key==='Enter') handleSubscribe(); });
+
+  function closeOverlay(){ document.getElementById('overlay').classList.remove('show'); }
+  function maybeClose(e){ if(e.target===e.currentTarget) closeOverlay(); }
+  </script>
+</body>
+</html>

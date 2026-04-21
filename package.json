@@ -1,0 +1,12 @@
+{
+  "name": "techofy-clouds",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Techofy Clouds — Coming Soon Page",
+  "dependencies": {
+    "@vercel/kv": "^3.0.0"
+  },
+  "engines": {
+    "node": ">=18.x"
+  }
+}
