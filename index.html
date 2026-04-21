@@ -525,12 +525,12 @@
 
       <div class="cube-scene">
         <div class="cube">
-          <div class="face f">☁️</div>
-          <div class="face b">🚀</div>
-          <div class="face r">⚡</div>
-          <div class="face l">🔒</div>
-          <div class="face t">🌐</div>
-          <div class="face d">💾</div>
+          <div class="face f">🕊️</div>
+          <div class="face b">🥀</div>
+          <div class="face r">☄️</div>
+          <div class="face l">🪐</div>
+          <div class="face t">🌸</div>
+          <div class="face d">🍃</div>
         </div>
       </div>
     </div>
@@ -600,9 +600,9 @@
     <div class="footer-links">
       <a href="#">Privacy</a>
       <a href="#">Terms</a>
-      <a href="mailto:hello@techofyclouds.com">Contact</a>
+      <a href="mailto:toxic@edev.fun">Contact</a>
     </div>
-    <div class="footer-right">© 2025 Techofy Clouds. All rights reserved.</div>
+    <div class="footer-right">© 2026 Techofy Clouds. All rights reserved.</div>
   </footer>
 
   <!-- ═══════ SUCCESS OVERLAY ═══════ -->
@@ -742,7 +742,7 @@
     msg.style.display='none'; msg.className='form-msg';
 
     if(!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
-      msg.textContent='⚠️ Please enter a valid email address.';
+      msg.textContent='Please enter a valid email address.';
       msg.style.display='block';
       setTimeout(()=>msg.style.display='none', 3200);
       return;
@@ -761,7 +761,7 @@
       });
       const data = await res.json();
 
-      label.textContent='✓ Subscribed!';
+      label.textContent='Subscribed!';
       spinner.style.display='none';
       document.getElementById('emailInput').value='';
       if(data.total !== undefined)
@@ -770,7 +770,7 @@
       setTimeout(()=>{ document.getElementById('overlay').classList.add('show'); launchConfetti(); }, 320);
 
     } catch(err){
-      msg.textContent='❌ Connection error. Please try again.';
+      msg.textContent='Connection error. Please try again.';
       msg.style.display='block';
       label.textContent='Notify Me';
       spinner.style.display='none';
